@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <style>
-    body {
-      padding-top: 65px;
-    }
-    iframe {
-      margin: 25px 0 25px 0;
-    }
+      body {
+        padding-top: 65px;
+      }
+      iframe {
+        margin: 25px 0 25px 0;
+      }
     </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -54,7 +54,7 @@
           pmcomm.js has the following characteristics:
           <ul>
               <li>Cross domain iframe invocation of javascript objects</li>
-              <li>Small, 3k minified</li>
+              <li>Small, 2.5k minified</li>
               <li>Does not depend on any libraries</li>
               <li>Works with all modern browsers</li>
               <li>JSON.stringify is used to encode proxied method parameters</li>
@@ -95,7 +95,7 @@ PMCommReceiver('repeater');
         <h3>Example 1</h3>
         In the first example, we call an object in another frame and get back a response from the
         return method of the proxied object.
-<pre><code>repeaterProxy.repeat("Hello...").success(function(res) {
+<pre><code>repeaterProxy.repeat("Hello...").then(function(res) {
   console.log(res);
 });</code></pre>
         <br/>
@@ -117,7 +117,7 @@ PMCommReceiver('repeater');
         <h3>Example 3</h3>
         In the third example, we will demostrate how errors are handled.  For this example, please open
         you javascript debugger console.  You can see the logged error messages.
-<pre><code>repeaterProxy.error("Hey!").error(function(err) {
+<pre><code>repeaterProxy.error("Hey!").catch(function(err) {
   console.error(err);
 });</code></pre>
         <br/>
@@ -143,7 +143,7 @@ PMCommReceiver('repeater');
       }
       function part1() {
         var repeaterProxy = init(window.frames.example1_frame)
-        repeaterProxy.repeat("Hello...").success(function(res) {
+        repeaterProxy.repeat("Hello...").then(function(res) {
           console.log(res);
         });
       }
@@ -155,7 +155,7 @@ PMCommReceiver('repeater');
       }
       function part3() {
         var repeaterProxy = init(window.frames.example3_frame)
-        repeaterProxy.error("Hey!").error(function(err) {
+        repeaterProxy.error("Hey!").catch(function(err) {
           console.error(err);
         });
       }
