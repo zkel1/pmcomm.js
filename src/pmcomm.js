@@ -42,7 +42,7 @@ Sender.prototype._onMsg = function(e) {
     var msg = this._msgs[e.data.id];
     if (e.data.result || e.data.error) {
       if (e.data.error) {
-        msg.reject(JSON.parse(e.data.error));
+        msg.reject(e.data.id+' '+JSON.parse(e.data.error));
       } else {
         msg.resolve(JSON.parse(e.data.result));
       }
@@ -55,7 +55,7 @@ Sender.prototype._onMsg = function(e) {
         callback.apply(callback, callback_data);
       }
       catch (err) {
-        console.error(err);
+        console.error(e.data.id, err);
       }
     }
 
@@ -85,7 +85,7 @@ Sender.prototype._postMsg = function(msgId, method, params, cbIdxs) {
 }
 
 Sender.prototype._invoke = function(method, params) {
-  var msgId = String(Math.random()+new Date().getTime());
+  var msgId = ""+(new Date().getTime()+Math.random());
   var _this = this;
   return new Promise(function(resolve, reject) {
     var msg = {
@@ -109,7 +109,7 @@ Sender.prototype._invoke = function(method, params) {
   });
 }
 
-function Receiver(objectName) {
+function Receiver(objectName, methods) {
   var callback_handler = function(id, resSource, resOrigin, cbIdx) {
     return function() {
       var msg = {
@@ -132,6 +132,12 @@ function Receiver(objectName) {
         params[cbIdx] = callback_handler(e.data.id, e.source, e.origin, cbIdx);
       });
       try {
+        console.log(methods,  methods instanceof RegExp, methods instanceof Set, send.method);
+        if (methods && (
+            methods instanceof RegExp && !methods.test(send.method) 
+            || methods instanceof Set && !methods.has(send.method))) {
+          throw "Unsupported method: "+send.method;
+        }
         res = method.apply(obj, params);
         var msg = {
           id: e.data.id,
@@ -140,7 +146,7 @@ function Receiver(objectName) {
         };
       }
       catch (err) {
-        console.error(err);
+        console.error(e.data.id, err);
         var msg = {
           id: e.data.id,
           error: JSON.stringify(err.toString()),
@@ -173,5 +179,7 @@ var PMCommSender = __pmcomm__.Sender;
   * Create a proxy listener for object
   * @method
   * @param {String} objectName - Variable name of the object
+  * @param {Set | RegExp | undefined} - A Set of method names allowed to be invoked for method or 
+  * A RegExp that matches method names allowed to be invoked or if undefined, all methods can be invoked
   */
 var PMCommReceiver = __pmcomm__.Receiver;

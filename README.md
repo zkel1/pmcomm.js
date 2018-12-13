@@ -3,7 +3,7 @@ Overview
 
 pmcomm.js creates a proxy object to a javascript object in another frame. The proxied object can be used as it was an object in the local frame. pmcomm.js has the following characteristics:
 * Cross domain iframe invocation of javascript objects
-* Small, 2.5k minified
+* Small, 2.7k minified
 * Does not depend on any libraries
 * Works with all modern browsers
 * JSON.stringify is used to encode proxied method parameters
@@ -40,9 +40,9 @@ var repeater = {
   }
 }
 
-PMCommReceiver('repeater');
+PMCommReceiver('repeater', new Set(['repeat', 'repeatCallback', 'error']));
 ```
-PMCommReceiver('repeater') creates a handler for remote invocation to the repeater object.
+PMCommReceiver('repeater', new Set(['repeat', 'repeatCallback', 'error'])) creates a handler for remote invocation to the repeater object.
 
 Example 1
 ---------

@@ -1,0 +1,23 @@
+{
+  "name": "pmcomm.js",
+  "version": "1.0.1",
+  "description": "Javascript library for simplified inter-frame communication via post messaging.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkel1/pmcomm.js.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zkel1/pmcomm.js/issues"
+  },
+  "homepage": "https://github.com/zkel1/pmcomm.js#readme",
+  "devDependencies": {
+    "jsdoc": "^3.5.5",
+    "uglify": "^0.1.5"
+  },
+  "scripts": {
+    "uglify": "uglifyjs src/pmcomm.js --source-map examples/js/pmcomm.min.js.map -cmo examples/js/pmcomm.min.js --stats",
+    "jsdoc": "jsdoc -d jsdoc --readme ./README.md src/pmcomm.js"
+  }
+}
