@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <style>
+    body {
+      padding-top: 65px;
+    }
+    iframe {
+      margin: 25px 0 25px 0;
+    }
+  </style>
+
+  <title>pmcomm.js</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">pmcomm.js</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href=".">About</a></li>
+        <li><a href="./jsdoc/">Jsdoc</a></li>
+        <li><a href="https://github.com/zkel1/pmcomm.js">Github</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container theme-showcase" role="main">
+  <div class="jumbotron">
+    <h1>pmcomm.js</h1>
+    <p class="lead">
+      Javascript Library for Cross Domain iFrame Proxy
+    </p>
+  </div>
+  <div>
+    <p class="lead">
+      pmcomm.js creates a proxy object of a javascript object in another frame.
+      The proxied object can be used as it was an object in the local frame.
+      pmcomm.js has the following characteristics:
+      <ul>
+          <li>Cross domain iframe invocation of javascript objects</li>
+          <li>Small. ~5k minified</li>
+          <li>Does not depend on any libraries (Promise support is necessary)</li>
+          <li>Works with all modern browsers</li>
+      </ul>
+    </p>
+    <h2>Examples</h2>
+    First, we need to create a proxy object to an object in another frame.
+    <pre><code id="frame_code"></code></pre>
+
+    <div>
+      <h3>Example 1</h3>
+        In the first example, we call an object in another frame and get back a response from the
+        return method of the proxied object.
+        <pre><code id="ex1_code"></code></pre>
+      <br/>
+      <button onclick="ex1();">Click to try example 1</button>
+      <iframe name="frame1" src="http://172.16.1.1:3000/frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>
+    </div>
+
+    <div>
+      <h3>Example 2</h3>
+      In the second example, we call an object in another frame and receive a callback from
+      the proxied object.
+      <pre><code id="ex2_code"></code></pre>
+      <br/>
+      <button onclick="ex2();">Click to try example 2</button>
+      <iframe name="frame2" src="./frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>
+    </div>
+
+    <div>
+      <h3>Example 3</h3>
+      In the third example, we call an object in another frame which return a promise.  Notice the promise is chained 
+      with the response promise.  Instead of receiving a promise, when the response promise is fulfilled, the result is 
+      the resolved promise from the frame.
+      <pre><code id="ex3_code"></code></pre>
+      <br/>
+      <button onclick="ex3();">Click to try example 3</button>
+      <iframe name="frame3" src="./frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>
+    </div>
+
+    <div>
+      <h3>Example 4</h3>
+      In this example, we will demostrate how errors are handled.  For this example, please open
+      you javascript debugger console.  You can see the logged error messages.
+      <pre><code id="ex4_code"></code></pre>
+      <br/>
+      <button onclick="ex4();">Click to try example 4</button>
+      <iframe name="frame4" src="./frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>
+    </div>
+
+  </div>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+<script src="./pmcomm.js"></script>
+<script>
+
+  function ex1() {
+    console.log('ex1')
+    PMCommSender.create(window.frames.frame1, '*', 'repeater').then(function(repeater) {
+      repeater.repeat_return('Hello').then(function(res) {
+        console.log(res)
+      })
+    });
+  }
+
+  function ex2() {
+    PMCommSender.create(window.frames.frame2, '*', 'repeater').then(function(repeater) {
+      repeater.repeat_callback('Hello', function(res) {
+        console.log(res)
+      })
+    });
+  }
+
+  function ex3() {
+    PMCommSender.create(window.frames.frame3, '*', 'repeater').then(function(repeater) {
+      repeater.repeat_promise('Hello').then(function(res) {
+        console.log(res)
+      })
+    });
+  }
+
+  function ex4() {
+    PMCommSender.create(window.frames.frame4, '*', 'repeater').then(function(repeater) {
+      repeater.repeat_error('Hello').then(function(res) {
+        console.log(res)
+      })
+    });
+  }
+
+  // dump code in the proper locations
+  document.getElementById('ex1_code').innerHTML = ex1.toString()
+  document.getElementById('ex2_code').innerHTML = ex2.toString()
+  document.getElementById('ex3_code').innerHTML = ex3.toString()  
+  document.getElementById('ex4_code').innerHTML = ex4.toString()    
+
+  // get code from iframe and dump it in the code box for the other frame
+  PMCommSender.create(window.frames.frame1, '*', 'code').then(function(code) {
+    code.get().then(function(res) {
+      document.getElementById('frame_code').innerHTML = res
+    })
+  });
+
+</script>
+
+</body>
+
+</html>

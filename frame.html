@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="log">iframe code will execute in here</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+    <script src="./pmcomm.js"></script>
+    <script>
+
+      function log(msg) {
+        document.getElementById('log').innerHTML = msg;
+      }
+      
+      function go() {
+        
+        var Repeater = function() {}
+
+        // example 1
+        Repeater.prototype.repeat_return = function(word) {
+          log('repeat_return called ', word);
+          return word+' returned to you!';
+        }
+        
+        // example 2
+        Repeater.prototype.repeat_callback = function(word, callback) {
+          log('repeat_callback called ', word);
+          callback(word+' called back to you!');
+        }
+
+        //example 3
+        Repeater.prototype.repeat_promise = function(word) {
+          log('repeat_promise called ', word);
+            return new Promise(function(resolve, reject) {
+              setTimeout(function() {
+                resolve(word+' promised to you!')
+              }, 1000);
+            })
+        }
+
+        // example 4
+        Repeater.prototype.repeat_error = function(word) {
+          log('repeat_error called ', word);
+          throw word+' creating an error';
+        }
+
+        PMCommReceiver.create(new Repeater(), 'repeater');
+      }
+
+      go();
+
+      var code = {
+        get: function() {
+          return go.toString();
+        }
+      };
+
+      PMCommReceiver.create(code, 'code');
+
+    </script>
+  </body>
+</html>
