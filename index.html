@@ -64,12 +64,12 @@
       </ul>
     </p>
     <h2>Examples</h2>
-    First, we need to create a proxy object to an object in another frame.
+    First, we need to create an object and proxy listener for the object in an iframe.
     <pre><code id="frame_code"></code></pre>
 
     <div>
       <h3>Example 1</h3>
-        In the first example, we call an object in another frame and get back a response from the
+        In the first example, we call the object in the other frame and get back a response from the
         return method of the proxied object.
         <pre><code id="ex1_code"></code></pre>
       <br/>
@@ -79,8 +79,7 @@
 
     <div>
       <h3>Example 2</h3>
-      In the second example, we call an object in another frame and receive a callback from
-      the proxied object.
+      In the second example, we call an object in the other frame and get a response in the callback function.
       <pre><code id="ex2_code"></code></pre>
       <br/>
       <button onclick="ex2();">Click to try example 2</button>
@@ -89,9 +88,9 @@
 
     <div>
       <h3>Example 3</h3>
-      In the third example, we call an object in another frame which return a promise.  Notice the promise is chained 
-      with the response promise.  Instead of receiving a promise, when the response promise is fulfilled, the result is 
-      the resolved promise from the frame.
+      In the third example, we call an object in the other frame that returns a promise.  Notice the promise is chained 
+      with the response promise.  The promise is resolved directly to the value of the 
+      promise in the proxied object from the other frame.
       <pre><code id="ex3_code"></code></pre>
       <br/>
       <button onclick="ex3();">Click to try example 3</button>
@@ -101,7 +100,8 @@
     <div>
       <h3>Example 4</h3>
       In this example, we will demostrate how errors are handled.  For this example, please open
-      you javascript debugger console.  You can see the logged error messages.
+      you javascript debugger console so you can see the error messages.  Error messages are generated in both
+      frames with the same unique message id.
       <pre><code id="ex4_code"></code></pre>
       <br/>
       <button onclick="ex4();">Click to try example 4</button>
