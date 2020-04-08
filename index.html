@@ -73,7 +73,8 @@
         return method of the proxied object.
         <pre><code id="ex1_code"></code></pre>
       <br/>
-      <button onclick="ex1();">Click to try example 1</button>
+      <button id="ex1" onclick="ex1();">Click to try example 1</button>
+      <code id="ex1_res"></code>
       <iframe name="frame1" src="./frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>
     </div>
 
@@ -82,7 +83,8 @@
       In the second example, we call an object in the other frame and get a response in the callback function.
       <pre><code id="ex2_code"></code></pre>
       <br/>
-      <button onclick="ex2();">Click to try example 2</button>
+      <button id="ex2" onclick="ex2();">Click to try example 2</button>
+      <code id="ex2_res"></code>
       <iframe name="frame2" src="./frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>
     </div>
 
@@ -93,8 +95,9 @@
       promise in the proxied object from the other frame.
       <pre><code id="ex3_code"></code></pre>
       <br/>
-      <button onclick="ex3();">Click to try example 3</button>
-      <iframe name="frame3" src="./frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>
+      <button id="ex3" onclick="ex3();">Click to try example 3</button>
+      <code id="ex3_res"></code>      
+      <iframe name="frame3" src="./frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>      
     </div>
 
     <div>
@@ -104,8 +107,9 @@
       frames with the same unique message id.
       <pre><code id="ex4_code"></code></pre>
       <br/>
-      <button onclick="ex4();">Click to try example 4</button>
-      <iframe name="frame4" src="./frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>
+      <button id="ex4" onclick="ex4();">Click to try example 4</button>
+      <code id="ex4_res"></code>
+      <iframe name="frame4" src="./frame.html" width="100%" height="50px" frameborder="1" align="bottom"></iframe>      
     </div>
 
   </div>
@@ -118,11 +122,11 @@
 <script>
 
   function ex1() {
-    console.log('ex1')
     PMCommSender.create(window.frames.frame1, '*', 'repeater').then(function(repeater) {
       repeater.repeat_return('Hello').then(function(res) {
         console.log(res)
-      })
+        document.getElementById('ex1_res').innerHTML = res
+      });
     });
   }
 
@@ -130,7 +134,8 @@
     PMCommSender.create(window.frames.frame2, '*', 'repeater').then(function(repeater) {
       repeater.repeat_callback('Hello', function(res) {
         console.log(res)
-      })
+        document.getElementById('ex2_res').innerHTML = res
+      });
     });
   }
 
@@ -138,7 +143,8 @@
     PMCommSender.create(window.frames.frame3, '*', 'repeater').then(function(repeater) {
       repeater.repeat_promise('Hello').then(function(res) {
         console.log(res)
-      })
+        document.getElementById('ex3_res').innerHTML = res
+      });
     });
   }
 
@@ -146,7 +152,8 @@
     PMCommSender.create(window.frames.frame4, '*', 'repeater').then(function(repeater) {
       repeater.repeat_error('Hello').then(function(res) {
         console.log(res)
-      })
+        document.getElementById('ex4_res').innerHTML = res
+      });
     });
   }
 

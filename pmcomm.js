@@ -214,7 +214,7 @@ var _R = {
           result:Object.keys(methods)
         }
       };
-      source.postMessage(msg, origin);  
+      source.postMessage(msg, origin);
     } else {
       source(Object.keys(methods));
     }
@@ -328,6 +328,29 @@ window.PMCommReceiver = {
    */
   destroy: function(name) {
     delete _R.receiverObjs[name];
+  },
+
+  /** 
+   *Query an object methods directly (without messaging)
+   * @method 
+   * @param {String} name - Name of the listener
+   */
+  query: function(name) {
+    return new Promise(function(resolve, reject) {
+      _R.handleQueryMsg(null, {name: name}, resolve, null);
+    });
+  },
+
+  /** 
+   * Invoke an object directly (without messaging)
+   * @method 
+   * @param {String} name - Name of the listener
+   * @param {String} method - Name of the function
+   * @param {list} params - List of parameters
+   */
+  invoke: function(name, method, params) {
+    var obj = _R.receiverObjs[name].obj;
+    return obj[method].apply(obj, params);
   }
 
 };
